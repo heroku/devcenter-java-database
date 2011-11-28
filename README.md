@@ -3,7 +3,7 @@ Connecting to Relational Databases on Heroku with Java
 
 Applications on Heroku can use any back-end data storage system.  You can either use a data storage system provided as a Heroku add-on or do your own thing.  The data storage systems available as Heroku add-ons range from relational databases to NoSQL databases.  Some of the relational databases that are available on Heroku are the shared Postgres database service from Heroku, the enterprise-grade Postgres database service from Heroku, various MySQL third party add-on providers, and the Oracle RDMS available from Amazon RDS.  Every application you create is automatically provisioned a shared Postgres database.  But you can easily add any other database service via Heroku add-ons.
 
-The relational database add-ons on Heroku provide the provisioned database connection information through an environment variable named `DATABASE_URL`.  Since Heroku is a polyglot platform the format of the connection information is not specific to Java and will need to be parsed for use an a Java application that connects via JDBC.  The format of the DATABASE_URL is:
+The relational database add-ons on Heroku provide the provisioned database connection information through an environment variable named `DATABASE_URL`.  Since Heroku is a polyglot platform the format of the connection information is not specific to Java and will need to be parsed for use an a Java application that connects via JDBC.  The format of the `DATABASE_URL` is:
 
     [database type]://[username]:[password]@[host]/[database name]
 
@@ -11,7 +11,7 @@ For instance:
 
     postgres://foo:foo@heroku.com/hellodb
 
-Note: Play Framework has out-of-the-box support for the DATABASE_URL format.
+Note: Play Framework has out-of-the-box support for the `DATABASE_URL` format.
 
 You can see the `DATABASE_URL` provided to an application by running:
 
@@ -20,7 +20,7 @@ You can see the `DATABASE_URL` provided to an application by running:
 It is not recommended to copy this value into a static file since the environment may change the value.  Instead the recommendation is for an application to read the `DATABASE_URL` environment variable and setup the database connections based on that information.
 
 
-Using the DATABASE_URL in Plain JDBC
+Using the `DATABASE_URL` in Plain JDBC
 ------------------------------------
 
 Here is a simple Java method that reads the `DATABASE_URL` environment variable and returns a `Connection`:
@@ -36,7 +36,7 @@ Here is a simple Java method that reads the `DATABASE_URL` environment variable 
     }
 
 
-Using the DATABASE_URL in Spring with XML Configuration
+Using the `DATABASE_URL` in Spring with XML Configuration
 -------------------------------------------------------
 
 Here is a snippet of Spring XML configuration that will setup a `BasicDataSource` from the `DATABASE_URL` and can then be used with Hibernate, JPA, etc:
@@ -52,7 +52,7 @@ Here is a snippet of Spring XML configuration that will setup a `BasicDataSource
     </bean>
 
 
-Using the DATABASE_URL in Spring with Java Configuration
+Using the `DATABASE_URL` in Spring with Java Configuration
 --------------------------------------------------------
 
 Alternatively you can use Java for configuration of the `BasicDataSource` in Spring:
