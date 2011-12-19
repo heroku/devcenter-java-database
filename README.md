@@ -1,7 +1,7 @@
 Connecting to Relational Databases on Heroku with Java
 ======================================================
 
-Applications on Heroku can use any back-end data storage system.  You can either use a data storage system provided as a Heroku add-on or do your own thing.  The data storage systems available as Heroku add-ons range from relational databases to NoSQL databases.  Some of the relational databases that are available on Heroku are the shared Postgres database service from Heroku, various MySQL third party add-on providers, and the Oracle RDMS available from Amazon RDS.  Every application you create is automatically provisioned a shared Postgres database.  But you can easily add any other database service via Heroku add-ons.
+Applications on Heroku can use any back-end data storage system.  You can either use a data storage system provided as a Heroku add-on or do your own thing.  The data storage systems available as Heroku add-ons include relational databases and NoSQL databases.  Some of the relational databases that are available on Heroku are the shared Postgres database service from Heroku, various MySQL third party add-on providers, and the Oracle RDMS available from Amazon RDS.  Every application you create is automatically provisioned a shared Postgres database.  But you can easily other database services via Heroku add-ons.
 
 The relational database add-ons on Heroku provide the provisioned database connection information through an environment variable named `DATABASE_URL`.  Since Heroku is a polyglot platform the format of the connection information is not specific to Java and will need to be parsed for use an a Java application that connects via JDBC.  The format of the `DATABASE_URL` is:
 
@@ -22,7 +22,7 @@ You can see the `DATABASE_URL` provided to an application by running:
 It is not recommended to copy this value into a static file since the environment may change the value.  Instead an application should read the `DATABASE_URL` environment variable and setup the database connections based on that information.
 
 
-Using the `DATABASE_URL` in Plain JDBC
+Using the `DATABASE_URL` in plain JDBC
 ------------------------------------
 
 This simple Java method reads the `DATABASE_URL` environment variable and returns a `Connection`:
@@ -39,7 +39,7 @@ This simple Java method reads the `DATABASE_URL` environment variable and return
     }
 
 
-Using the `DATABASE_URL` in Spring with XML Configuration
+Using the `DATABASE_URL` in Spring with XML configuration
 -------------------------------------------------------
 
 This snippet of Spring XML configuration will setup a `BasicDataSource` from the `DATABASE_URL` and can then be used with Hibernate, JPA, etc:
@@ -56,7 +56,7 @@ This snippet of Spring XML configuration will setup a `BasicDataSource` from the
     </bean>
 
 
-Using the `DATABASE_URL` in Spring with Java Configuration
+Using the `DATABASE_URL` in Spring with Java configuration
 --------------------------------------------------------
 
 Alternatively you can use Java for configuration of the `BasicDataSource` in Spring:
@@ -82,8 +82,20 @@ Alternatively you can use Java for configuration of the `BasicDataSource` in Spr
         }
     }
 
+Connecting to a dedicated database remotely
+-------------------------------------------
 
-Sample Project
+If you're using a Heroku Postgres dedicated database you can connect to it remotely for maintenance and debugging purposes. However doing so requires that you use an SSL connection. This can be done with JDBC.
+
+your JDBC connection URL will need to have the following parameters:
+
+    jdbc:postgresql://host/database?user=user&password=password&ssl=true&sslfactory=org.postgresql.ssl.NonValidatingFactory
+
+If you leave off ssl=true you will get a connection error. If you leave off sslfactory=org.postgresql.ssl.NonValidatingFactory you may get an error like:
+
+    unable to find valid certification path to requested target
+
+Sample project
 --------------
 
 A sample project illustrating these three methods of setting up a database connection on Heroku can be found at:
