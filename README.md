@@ -1,17 +1,36 @@
 Connecting to Relational Databases on Heroku with Java
 ======================================================
 
-Applications on Heroku can use any back-end data storage system.  You can either use a data storage system provided as a Heroku add-on or do your own thing.  The data storage systems available as Heroku add-ons include relational databases and NoSQL databases.  Some of the relational databases that are available on Heroku are the shared Postgres database service from Heroku, various MySQL third party add-on providers, and the Oracle RDMS available from Amazon RDS.  Every application you create is automatically provisioned a shared Postgres database.  But you can easily other database services via Heroku add-ons.
+Applications on Heroku can use a variety of relational database services including the [Postgres database](http://devcenter.heroku.com/articles/heroku-postgres-documentation) offered by Heroku and [MySQL](http://devcenter.heroku.com/articles/amazon_rds) offered by AWS. Databases are provisioned using the add-on system. Some applications will have a small, free postgres database provisioned by default. You can check this by running
 
-The relational database add-ons on Heroku provide the provisioned database connection information through an environment variable named `DATABASE_URL`.  Since Heroku is a polyglot platform the format of the connection information is not specific to Java and will need to be parsed for use an a Java application that connects via JDBC.  The format of the `DATABASE_URL` is:
+    :::term
+    $ heroku info
+    === sparkling-wine-2003
+    Web URL:        http://sparkling-wine-2003.herokuapp.com/
+    Git Repo:       git@heroku.com:sparkling-wine-2003.git
+    Repo size:      21M
+    Slug size:      916k
+    Stack:          cedar
+    Data size:      (empty)
+    Addons:         Shared Database 5MB
+    Owner:          jesper@heroku.com
+
+and look for the "Shared Database 5MB" under Addons. It depends on the buildpack whether a database is provisioned automatically. You can provision the shared database manually with
+
+    $ heroku addons:add shared-database:5mb
+    
+The shared database is meant for testing purposes. For a production application you must use one of the production quality SQL database services:
+
+* [Heroku PostgresQL](http://devcenter.heroku.com/articles/heroku-postgres-documentation)
+* [Amazon RDS](http://devcenter.heroku.com/articles/amazon_rds)
+
+Once you have provisioned a relational database to your application. The application reads the database connection information from the `DATABASE_URL` config variable. It is formatted like this:
 
     [database type]://[username]:[password]@[host]/[database name]
 
 For instance:
 
     postgres://foo:foo@heroku.com/hellodb
-
-Note: Play Framework has out-of-the-box support for the `DATABASE_URL` format.
 
 You can see the `DATABASE_URL` provided to an application by running:
 
@@ -21,11 +40,16 @@ You can see the `DATABASE_URL` provided to an application by running:
 
 It is not recommended to copy this value into a static file since the environment may change the value.  Instead an application should read the `DATABASE_URL` environment variable and setup the database connections based on that information.
 
+Using the `DATABASE_URL` in a Play! Framework App
+-------------------------------------------------
+
+Play! Framework supports the `DATABASE_URL` environment variable out-of-the box. The built-in ORM framework will automatically use this variable if it is present, so there is not need for any additional configuration.
+
 
 Using the `DATABASE_URL` in plain JDBC
 ------------------------------------
 
-This simple Java method reads the `DATABASE_URL` environment variable and returns a `Connection`:
+To instantiate a JDBC connection in your code, you can use a method like this:
 
     :::java
     private static Connection getConnection() throws URISyntaxException, SQLException {
