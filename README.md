@@ -43,7 +43,7 @@ It is not recommended to copy this value into a static file since the environmen
 Using the `DATABASE_URL` in a Play! Framework App
 -------------------------------------------------
 
-Play! Framework supports the `DATABASE_URL` environment variable out-of-the box. The built-in ORM framework will automatically use this variable if it is present, so there is not need for any additional configuration.
+Play! Framework supports the `DATABASE_URL` environment variable out-of-the box. The built-in ORM framework will automatically use this variable if it is present, so there is no need for any additional configuration.
 
 
 Using the `DATABASE_URL` in plain JDBC
