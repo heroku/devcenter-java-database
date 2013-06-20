@@ -95,7 +95,7 @@ Alternatively you can use Java for configuration of the `BasicDataSource` in Spr
 
             String username = dbUri.getUserInfo().split(":")[0];
             String password = dbUri.getUserInfo().split(":")[1];
-            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath() + ":" + dbUri.getPort();
 
             BasicDataSource basicDataSource = new BasicDataSource();
             basicDataSource.setUrl(dbUrl);
