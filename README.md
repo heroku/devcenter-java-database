@@ -57,7 +57,7 @@ To instantiate a JDBC connection in your code, you can use a method like this:
 
         String username = dbUri.getUserInfo().split(":")[0];
         String password = dbUri.getUserInfo().split(":")[1];
-        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+        String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + (dbUri.getPort() > 0 ? ":" + dbUri.getPort() : "") + dbUri.getPath();
 
         return DriverManager.getConnection(dbUrl, username, password);
     }
@@ -95,7 +95,7 @@ Alternatively you can use Java for configuration of the `BasicDataSource` in Spr
 
             String username = dbUri.getUserInfo().split(":")[0];
             String password = dbUri.getUserInfo().split(":")[1];
-            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath() + ":" + dbUri.getPort() + dbUri.getPath();
+            String dbUrl = "jdbc:postgresql://" + dbUri.getHost() + (dbUri.getPort() > 0 ? ":" + dbUri.getPort() : "") + dbUri.getPath();
 
             BasicDataSource basicDataSource = new BasicDataSource();
             basicDataSource.setUrl(dbUrl);
